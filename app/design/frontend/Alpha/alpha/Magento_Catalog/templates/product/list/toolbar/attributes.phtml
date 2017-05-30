@@ -1,0 +1,109 @@
+<?php
+/**
+ * Product list toolbar
+ *
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ */
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
+?>
+<?php 
+$pagerUrl = $this->getPagerUrl(); 
+$badges = $this->getSortAttribute('badge');
+$brands = $this->getSortAttribute('brand');
+$colors = $this->getSortAttribute('color');
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$request = $objectManager->create('\Magento\Framework\App\RequestInterface');
+$params = $request->getParams();
+
+if(empty($params)) {
+	$pagerParam = $pagerUrl . '?';
+} else {
+	$pagerParam = $pagerUrl . '&';
+}
+if (isset($params['badge']) && $params['badge'] != '') {
+	$badgeEmpty = $this->getSortLink($pagerUrl, $params, 'badge');	
+} 
+if (isset($params['brand']) && $params['brand'] != '') {
+	$brandEmpty = $this->getSortLink($pagerUrl, $params, 'brand');	
+} 
+if (isset($params['color']) && $params['color'] != '') {
+	$colorEmpty =  $this->getSortLink($pagerUrl, $params, 'color');
+} 
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance(); 
+$category = $objectManager->get('Magento\Framework\Registry')->registry('current_category');
+$cateinstance = $objectManager->create('Magento\Catalog\Model\CategoryFactory');
+$cateid = $category->getId();
+$categoryProducts = $cateinstance->create()->load($cateid)->getProductCollection()->addAttributeToSelect('*');
+$arrayBrand = array();
+$arrayBadge = array();
+$arrayColor = array();
+
+foreach ($categoryProducts as $product) {
+    $arrayBrand[] = $product->getResource()->getAttribute('brand')->getFrontend()->getValue($product);
+    $arrayBadge[] = $product->getResource()->getAttribute('badge')->getFrontend()->getValue($product);
+    $arrayColor[] = $product->getResource()->getAttribute('color')->getFrontend()->getValue($product);
+}
+$arrayBrand = array_unique($arrayBrand);
+$arrayBadge = array_unique($arrayBadge);
+$arrayColor = array_unique($arrayColor);
+?>
+<div class="filter-toggle">
+</div>
+<div class="sort-attributes">
+	<div class="sort-attribute-list">
+		<label class="sorter-label"><?php echo __('Filter by:'); ?></label>
+	
+	<?php if(!empty($brands)): ?>
+		<div class="toolbar-brand sort-item brand">
+			<select name="brand" data-role="brand" id="brand" class="sorter-options">
+				<option value="<?php echo (isset($params['brand']) && $params['brand'] != '') ? $brandEmpty : $pagerUrl; ?>"><?php echo __('Brand'); ?></option>
+			<?php foreach ($brands as $brand) { 
+				if(!empty($brand->getValue()) && in_array($brand->getLabel(),$arrayBrand)):
+			?>
+				<option value="<?php echo $pagerParam . 'brand=' . $brand->getValue(); ?>" <?php echo (isset($params['brand']) && $params['brand'] == $brand->getValue()) ? 'selected="selected"' : ''; ?>><?php echo $brand->getLabel(); ?></option>
+			<?php endif; } ?>
+			</select>
+		</div>
+	<?php endif; ?>
+    <?php if(!empty($badges)): ?>
+		<div class="toolbar-badge sort-item badges">
+			<select name="badge" data-role="badge" id="badge" class="badge-options">
+				<option value="<?php echo (isset($params['badge']) && $params['badge'] != '') ? $badgeEmpty : $pagerUrl; ?>"><?php echo __('Badge'); ?></option>
+			<?php foreach ($badges as $badge) { 
+				if(!empty($badge->getValue()) && in_array($badge->getLabel(),$arrayBadge)):
+			?>
+				<option value="<?php echo $pagerParam . 'badge=' . $badge->getValue(); ?>" <?php echo (isset($params['badge']) && $params['badge'] == $badge->getValue()) ? 'selected="selected"' : ''; ?>><?php echo $badge->getLabel(); ?></option>
+			<?php endif; } ?>
+			</select>
+		</div>
+	<?php endif; ?>
+	<?php if(!empty($colors)): ?>
+		<div class="toolbar-color sort-item color">
+			<select name="color" data-role="color" id="color" class="sorter-options">
+				<option value="<?php echo (isset($params['color']) && $params['color'] != '') ? $colorEmpty : $pagerUrl; ?>"><?php echo __('Color'); ?></option>
+			<?php foreach ($colors as $color) { 
+				if(!empty($color->getValue()) && in_array($color->getLabel(),$arrayColor)):
+			?>
+				<option value="<?php echo $pagerParam . 'color=' . $color->getValue(); ?>" <?php echo (isset($params['color']) && $params['color'] == $color->getValue()) ? 'selected="selected"' : ''; ?>><?php echo $color->getLabel(); ?></option>
+			<?php endif; } ?>
+			</select>
+		</div>
+	<?php endif; ?>
+	</div>
+</div>
+<script type="text/javascript">
+	(function  () {
+		require([
+			"jquery"
+		],function($){
+			$('.sort-item').on('change', 'select', function(e){
+				e.preventDefault();
+				var attSelected=$(this).find("option:selected");
+				var url=attSelected.val();
+				window.location.href = url;
+			});
+			
+		});
+	})();
+</script>	

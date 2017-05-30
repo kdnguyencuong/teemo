@@ -1,0 +1,54 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');//get current product
+	$productid=$product->getId();
+    $product=$objectManager->create("Magento\Catalog\Model\Product")->load($productid);
+    $RatingOb=$objectManager->create("Magento\Review\Model\Review");
+    $RatingOb=$objectManager->get("Magento\Review\Model\ReviewFactory");
+	$storeId = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore(null)->getId();
+    $RatingOb->create()->getEntitySummary($product, $storeId);      
+    $reviewCount = $product->getRatingSummary()->getReviewsCount();
+?>
+<div class="block-review-top">
+	<div class="block-title-name desktop-only">
+		<strong><?php echo __('Reviews ') ?></strong><?php echo __('see what others think') ?>
+	</div>
+	<div class="block-title-name mobile-only">
+		<strong><?php echo __('Reviews ') ?></strong><span class="review-count"><?php echo $reviewCount; ?></span>
+	</div>
+	<button class="action tocart primary write-review-btn" type="button"><span><?php echo __('Write a review') ?></span></button>
+</div>
+<div class="block-review-container">
+	<div id="product-review-container" data-role="product-review"></div>
+	<?php echo $block->getChildHtml(); ?>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Review/js/process-reviews": {
+                "productReviewUrl": "<?php /* @escapeNotVerified */ echo $block->getProductReviewUrl();?>"
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript">
+	require(['jquery'], function ($) {
+		jQuery(".write-review-btn").click(function() {
+			var windowWidth = jQuery(window).width();
+			var bodyelem = jQuery.browser.safari ? jQuery("body") : jQuery('html, body');
+			var offsetTop = jQuery('#review-form').offset().top;
+
+			bodyelem.animate({
+				scrollTop: offsetTop
+			}, 500);
+		});
+	})
+</script>

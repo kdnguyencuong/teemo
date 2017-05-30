@@ -1,0 +1,123 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @description:
+ *
+ */
+?>
+<?php
+    $_items = $block->getReviewsCollection()->getItems();
+    $format = $block->getDateFormat() ?: \IntlDateFormatter::MEDIUM;
+?>
+
+<?php
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+	$baseUrl = $storeManager->getStore()->getBaseUrl();
+	$currentCustomer = "";
+	$class = "dont-click";
+	$title = "Please login before.";
+	
+	$helpfulModel = $objectManager->create('\Alpha\Helpful\Model\Helpful');
+
+	$customerSession = $objectManager->create('Magento\Customer\Model\Session');
+	if($customerSession->isLoggedIn()) {
+		$currentCustomer = $customerSession->getCustomer()->getId();
+		$class = "";
+		$title="";
+	}
+?>
+<?php if (count($_items)):?>
+<div class="block review-list" id="customer-reviews">
+    <div class="block-content">
+        <ol class="items review-items">
+        <?php foreach ($_items as $_review):?>
+            <li class="item review-item" itemscope itemprop="review" itemtype="http://schema.org/Review">
+				<div class="review-image">
+					<?php if (count($_review->getRatingVotes())): ?>
+						<div class="review-ratings-container">
+							<div class="review-ratings rating-mobile">
+								<?php foreach ($_review->getRatingVotes() as $_vote): ?>
+								<div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+									<div class="rating-result" title="<?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%">
+										<meta itemprop="worstRating" content = "1"/>
+										<meta itemprop="bestRating" content = "100"/>
+										<span style="width:<?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%">
+											<span itemprop="ratingValue"><?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%</span>
+										</span>
+									</div>
+								</div>
+								<?php endforeach; ?>
+							</div>
+						</div>
+					<?php endif; ?>
+					<img src='<?php echo $this->getViewFileUrl('images/review-image.jpg'); ?>' alt="<?php echo $block->escapeHtml($_review->getTitle()) ?>">
+				</div>
+				<div class="review-info">
+					<div class="review-info-top">
+						<div class="review-title" itemprop="author"><?php echo $block->escapeHtml($_review->getNickname()) ?></div>
+						<?php if (count($_review->getRatingVotes())): ?>
+							<div class="review-ratings rating-desktop">
+							<?php foreach ($_review->getRatingVotes() as $_vote): ?>
+							<div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+								<div class="rating-result" title="<?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%">
+									<meta itemprop="worstRating" content = "1"/>
+									<meta itemprop="bestRating" content = "100"/>
+									<span style="width:<?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%">
+										<span itemprop="ratingValue"><?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%</span>
+									</span>
+								</div>
+							</div>
+							<?php endforeach; ?>
+							</div>
+						<?php endif; ?>
+						<div class="review-details">
+							<p class="review-date">
+								<time class="review-details-value" itemprop="datePublished" datetime="<?php /* @escapeNotVerified */ echo $block->formatDate($_review->getCreatedAt(), $format) ?>"><?php /* @escapeNotVerified */ echo $block->formatDate($_review->getCreatedAt(), $format) ?></time>
+							</p>
+						</div>
+					</div>
+					<div class="review-content" itemprop="description">
+						<?php echo nl2br($block->escapeHtml($_review->getDetail())) ?>
+					</div>
+					<?php
+						$classYes = "";
+						$classNo = "";
+						$sumYes = $helpfulModel->sumHelpful($_review->getId(), 1);
+						$sumNo = $helpfulModel->sumHelpful($_review->getId(), 2);
+						$choosing = $helpfulModel->checkChoosing($_review->getId(), $currentCustomer);
+						if($choosing && $choosing != ""){
+							if($choosing == 1){
+								$classYes = " choosing";
+							}
+							if($choosing == 2){
+								$classNo = " choosing";
+							}
+						}
+					?>
+					<ul class="review-help">
+						<li class="help-title"><?php echo __('Was this review helpful to you?') ?></li>
+						<li class="help-yes" title="<?php echo $title; ?>"><a href="javascript:void(0)" class="h-action h-action-yes <?php echo $class.$classYes; ?>" id="yes-<?php echo $_review->getId(); ?>"><?php echo __('Yes') ?></a><span> (<?php echo $sumYes; ?>)</span></li>
+						<li class="help-no" title="<?php echo $title; ?>"><a href="javascript:void(0)" class="h-action h-action-no <?php echo $class.$classNo; ?>" id="no-<?php echo $_review->getId(); ?>"><?php echo __('No') ?></a><span> (<?php echo $sumNo; ?>)</span></li>
+					</ul>
+				</div>
+            </li>
+        <?php endforeach; ?>
+        </ol>
+        <div class="toolbar review-toolbar">
+            <?php echo $block->getChildHtml('toolbar') ?>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="heplpful-ajaxurl" value="<?php echo $baseUrl.'helpful/index/add'; ?>" />
+<input type="hidden" id="customer-logined" value="<?php echo $currentCustomer; ?>" />
+<?php endif;?>

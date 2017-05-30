@@ -1,0 +1,41 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Product list toolbar
+ *
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ */
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance(); 
+$pagerUrl = $this->getPagerUrl(); 
+$request = $objectManager->create('\Magento\Framework\App\RequestInterface');
+$params = $request->getParams();
+
+if(empty($params)) {
+	$pagerParam = $pagerUrl . '?';
+} else {
+	$pagerParam = $pagerUrl . '&';
+}
+?>
+<div class="field limiter">
+    <label class="label" for="limiter">
+        <span><?php /* @escapeNotVerified */ echo __('Items on page:') ?></span>
+    </label>
+    <div class="control">
+		<?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
+			<a href="<?php /* @escapeNotVerified */ echo $pagerParam . 'product_list_limit=' . $_key ?>" class="limit-product limit-item <?php if ($block->isLimitCurrent($_key)): ?>selected<?php endif ?>">
+				<?php /* @escapeNotVerified */ echo $_limit ?>
+			</a>
+		<?php endforeach; ?>
+
+    </div>
+</div>

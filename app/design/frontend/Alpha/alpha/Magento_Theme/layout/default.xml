@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="default_head_blocks"/>
+    <body>
+		<referenceContainer name="header.container">
+			<block class="Magento\Cms\Block\Block" name="header.top" before="-">
+				<arguments>
+					<argument name="block_id" xsi:type="string">header-top-mobile</argument>
+				</arguments>
+			</block>
+			<block class="Magento\Cms\Block\Block" name="header.phone.mid">
+				<arguments>
+					<argument name="block_id" xsi:type="string">header-phone</argument>
+				</arguments>
+			</block>
+		</referenceContainer>
+		<referenceContainer name="main.wrapper">
+			<block class="Magento\Cms\Block\Block" name="main.menu.right" before="megamenu">
+				<arguments>
+					<argument name="block_id" xsi:type="string">main-menu-right</argument>
+				</arguments>
+			</block>
+			
+			<block class="Magento\Framework\View\Element\Template" name="popup.after.added" as="popup.after.added" template="Magento_Theme::html/addsuccess.phtml"/>
+		</referenceContainer>
+		<referenceContainer name="footer">
+			<container name="footer.top" label="Page Footer top" htmlTag="div" htmlClass="footer-top">
+				
+			</container>
+			<container name="footer.center" label="Page Footer Center" htmlTag="div" htmlClass="footer-center">
+                <block class="Magento\Cms\Block\Block" name="footer.item1">
+					<arguments>
+						<argument name="block_id" xsi:type="string">about-alpha-catering-equipment</argument>
+					</arguments>
+				</block>
+				<block class="Magento\Cms\Block\Block" name="footer.item4">
+					<arguments>
+						<argument name="block_id" xsi:type="string">map</argument>
+					</arguments>
+				</block>
+            </container>
+        </referenceContainer>
+        <!-- end footer -->
+		<block class="Magento\Cms\Block\Block" name="copy.right.bottom">
+				<arguments>
+					<argument name="block_id" xsi:type="string">copy-right</argument>
+				</arguments>
+		</block>
+		
+		
+		<block class="Magento\Framework\View\Element\Template" name="header.account" template="Magento_Theme::html/header/account_header.phtml"/>
+        <move element="breadcrumbs" destination="main.wrapper" after="megamenu"/>
+        <move element="top.search" destination="header-wrapper" after="logo"/>
+		<move element="header.phone.mid" destination="header-wrapper" after="top.search"/>
+        <move element="header.account" destination="header-wrapper" after="header.phone.mid"/>
+        <move element="miniquote" destination="header-wrapper" after="minicart"/>
+        <move element="form.subscribe" destination="footer.top" />
+        <move element="copy.right.bottom" destination="before.body.end" />
+		<referenceBlock name="footer_links" remove="true"/>
+		<referenceContainer name="navigation.sections" remove="true"/>
+		<referenceContainer name="header.panel" remove="true"/>
+    </body>
+</page>

@@ -1,0 +1,39 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+?>
+<?php if ($block->getCurrentCategory()->getCategorySeoName()): ?>
+	<div class="page-title-wrapper seo-name">
+		<h1 class="page-title" id="page-title-heading" aria-labelledby="page-title-heading toolbar-amount">
+			<span class="base" data-ui-id="page-title-wrapper"><?php echo $block->getCurrentCategory()->getCategorySeoName(); ?></span>    
+		</h1>
+	</div>
+<?php else :?>
+	<div class="page-title-wrapper seo-name">
+		<h1 class="page-title" id="page-title-heading" aria-labelledby="page-title-heading toolbar-amount">
+			<span class="base" data-ui-id="page-title-wrapper"><?php echo $block->getCurrentCategory()->getName(); ?></span>    
+		</h1>
+	</div>
+<?php endif; ?>
+<?php if ($_description = $block->getCurrentCategory()->getDescription()): ?>
+    <div class="category-description">
+		<div class="category-description-content">
+			<?php /* @escapeNotVerified */ echo $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory(), $_description, 'description') ?>
+			<div class="view-more">
+				<span>>> <?php echo __('View more'); ?></span>
+			</div>
+		</div>
+    </div>
+<?php endif; ?>

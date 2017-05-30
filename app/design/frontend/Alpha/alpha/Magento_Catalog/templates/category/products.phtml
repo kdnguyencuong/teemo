@@ -1,0 +1,134 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+?>
+<?php if (!$block->isContentMode() || $block->isMixedMode()):
+	$_helper    = $this->helper('Magento\Catalog\Helper\Output');
+    $_category  = $block->getCurrentCategory();
+	
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();	
+	$productHelper = $objectManager->create('Alpha\Productfavourites\Helper\Data');
+
+	$layoutTemplate = $_category->getLayoutTemplate();
+	$subcategories = $block->getCategoryList();
+	$countCates = count($subcategories);	
+	if($layoutTemplate == 2 || ($_category->getLevel() == 2 && $countCates > 0)) {
+		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+		$_columnCount = 5;
+		echo '<ul class="categories-grid subcategories">';
+		$i=0;foreach($subcategories as $subcate):
+			$i++;
+			$subcaturl = $subcate->getUrl();
+			if($_category->getName() == 'Brands') {
+				if ($subcate->getThumbnailImageUrl() == '' || !(@getimagesize($subcate->getThumbnailImageUrl()))) {
+					$_imgHtml = '<img height="150px" width="300px" src="' . $block->getViewFileUrl('images/placeholder-brands.jpg') . '" />';
+				} else {
+					$_imgHtml = '<img height="150px" width="300px" src="' . $subcate->getThumbnailImageUrl() . '" />';
+				}
+			} else {
+				if ($subcate->getThumbnailImageUrl() == '' || !(@getimagesize($subcate->getThumbnailImageUrl()))) {
+					$_imgHtml = '<img height="200px" width="200px" src="' . $block->getViewFileUrl('images/placeholder.jpg') . '" />';
+				} else {
+					$_imgHtml = '<img height="200px" width="200px" src="' . $productHelper->resizeKeepAspectRatio($subcate->getThumbnailImage(),200,200,100,'catalog/category/') . '" />';
+				}				
+			}
+			$shortDes = $subcate->getShortDescription();
+			if(($i-1)%$_columnCount==0): 
+				$class = 'first';
+			elseif($i%$_columnCount==0):
+				$class = 'last';
+			else:
+				$class = '';
+			endif; ?>
+			<li class="subcate-item <?php //echo $class; ?>">
+				<div class="category-item-container">
+					<div class="category-img-thumbnail"><a class="sub-category-image" href="<?php echo $subcaturl; ?>"  title="<?php echo $subcate->getName(); ?>"><?php echo $_imgHtml; ?></a></div>
+					<div class="category-container">
+						<a class="category-name" href="<?php echo $subcaturl; ?>"  title="<?php echo $subcate->getName(); ?>"><?php echo $subcate->getName(); ?> <i class="fa fa-caret-right" aria-hidden="true"></i></a>
+						<div class="categpry-short-description"><?php echo $_helper->categoryAttribute($subcate, $shortDes, 'image');  ?></div>
+					</div>
+					<a href="<?php echo $subcaturl; ?>">
+						<div class="category-container-bg">
+							
+						</div>
+					</a>
+				</div>
+			
+			</li>
+		<?php endforeach; ?>
+			<style>
+				.filter-options{
+					display: none !important;
+				}
+				.filter-title{
+					display: none !important;
+				}
+			</style>
+		<?php
+		echo '</ul>';
+		
+		$string = str_replace(' ', '-', $_category->getName()); 
+		$identifier = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+		$string_identifier = str_replace('--', '-', strtolower($identifier));
+		$identifier = $string_identifier . '-block'; 
+
+		$html = $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId($identifier)->toHtml();
+		if($html != '') {
+			echo $html;
+		} else {
+			echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('block-categories')->toHtml();
+		}
+	} elseif($layoutTemplate == 3 && $countCates > 0) {
+		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+		$_columnCount = 8;
+		echo '<div class="subcategory-item">';
+		echo '<div class="title-subcategory"><h3>'.__('Sub Categories').'</h3></div>';
+		echo '<ul class="categories-grid subcategories fullwidth">';
+		$i=0;foreach($subcategories as $subcate):
+			$i++;
+			$subcaturl = $subcate->getUrl();
+			if ($subcate->getThumbnailImageUrl() == '') {
+				$_imgHtml = '<img height="200px" width="200px" src="' . $block->getViewFileUrl('images/placeholder.jpg') . '" />';
+			} else {
+				 $_imgHtml = '<img height="200px" width="200px" src="' . $productHelper->resizeKeepAspectRatio($subcate->getThumbnailImage(),200,200,100,'catalog/category/') . '" />';
+			}
+			$shortDes = $subcate->getShortDescription();
+			if(($i-1)%$_columnCount==0): 
+				$class = 'first';
+			elseif($i%$_columnCount==0):
+				$class = 'last';
+			else:
+				$class = '';
+			endif; ?>
+			<li class="subcate-item <?php //echo $class; ?>">
+				<div class="category-item-container">
+					<div class="category-img-thumbnail"><a class="sub-category-image" href="<?php echo $subcaturl; ?>"  title="<?php echo $subcate->getName(); ?>"><?php echo $_imgHtml; ?></a></div>
+					<div class="category-container">
+						<a class="category-name" href="<?php echo $subcaturl; ?>"  title="<?php echo $subcate->getName(); ?>"><?php echo $subcate->getName(); ?> <i class="fa fa-caret-right" aria-hidden="true"></i></a>
+					</div>
+				</div>
+			
+			</li>
+			
+		<?php endforeach;
+		echo '</ul>';
+		echo '</div>';
+		
+		echo $block->getProductListHtml();
+	} else {
+		echo $block->getProductListHtml();
+	}
+endif;
+	 ?>

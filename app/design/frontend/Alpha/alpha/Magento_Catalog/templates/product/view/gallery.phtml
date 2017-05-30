@@ -1,0 +1,87 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * Product media data template
+ *
+ * @var $block \Magento\Catalog\Block\Product\View\Gallery
+ */
+?>
+<?php 
+	$productId = $block->getProduct()->getId(); 
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance(); 
+	$_product = $objectManager->get('Magento\Catalog\Model\Product')->load($productId);
+	$badge= $_product->getResource()->getAttribute('badge')->getFrontend()->getValue($_product);
+?>
+<?php if($badge && $badge != ""): ?>
+	<div class="product-badge <?php echo strtolower($badge); ?>">&nbsp;</div>
+<?php endif; ?>
+<div class="gallery-placeholder">
+    <?php 
+		$imagehelper = $objectManager->create('Magento\Catalog\Helper\Image');
+		$image = $imagehelper->init($_product, 'category_page_list')->constrainOnly(FALSE)->keepAspectRatio(TRUE)->keepFrame(TRUE)->resize(400,400)->getUrl();
+		$store = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore();
+		$imageUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $_product->getImage();
+	?>
+	<div class="product-image product-image-zoom">
+		<a class="thumbnail-image-link" href="<?php echo $imageUrl; ?>" data-lightbox="example-set">
+			<img src="<?php echo $image; ?>" alt="<?php echo $_product->getName(); ?>"/>
+		</a>
+	</div>
+	
+	<div class="more-views">
+        <?php
+			$_helperGallery = $this->helper('Alpha\Productfavourites\Helper\Data'); 
+            $_helperGallery->addGallery($_product);
+            $images = $_helperGallery->getGalleryImages($_product);
+            if ($images instanceof \Magento\Framework\Data\Collection) {
+                $i = 1;
+                foreach ($images as $image) {
+                    $item = $image->getData();
+                    if (isset($item['media_type']) && $item['media_type'] == 'image'):
+        ?>
+                        <a class="thumbnail-image-link" href="<?php echo isset($item['large_image_url']) ? $item['large_image_url'] : null; ?>" data-lightbox="example-set">
+                            <img src="<?php echo isset($item['small_image_url']) ? $item['small_image_url'] : null; ?>" alt="">
+                        </a>
+        <?php
+                        $i++;
+                    endif;
+                }
+            }
+        ?>
+	</div>
+</div>
+<div class="clear"></div>
+<?php /*
+<div class="social-iconbox">
+    <!-- AddThis Button BEGIN -->
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=686310034764892&version=v2.0";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script> 
+		<script src="https://apis.google.com/js/platform.js" async defer></script> 
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+		<ul class="addthis_toolbox addthis_default_style">
+		  <li class="fb-like-button addthis-button" >
+			<div class="fb-like" data-href="<?php echo $_product->getUrl(); ?>" data-width="50px" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
+		  </li>
+		  <li class="twitter-button addthis-button" ><a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo $_product->getUrl(); ?>"><?php echo __('Tweet'); ?></a></li>
+		  <li class="g-plusone-button addthis-button" >
+			<div class="g-plusone" data-size="medium"></div>
+		  </li>
+		</ul>
+		<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4e794079276XXXXXX"></script> 
+    <!-- AddThis Button END --> 
+</div>
+<div class="clear"></div>
+*/ ?>
+

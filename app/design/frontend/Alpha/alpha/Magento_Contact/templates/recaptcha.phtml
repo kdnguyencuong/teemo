@@ -1,0 +1,27 @@
+<?php $sitekey = $this->getCaptchaKey(); ?>
+<?php if($sitekey && $sitekey != ''): ?>
+	<div class="field recaptcha required">
+		<div class="g-recaptcha-box">
+			<div class="g-recaptcha" id="recaptcha-1" data-sitekey="<?php echo $sitekey; ?>" style="transform:scale(0.8);-webkit-transform:scale(0.8);transform-origin:0 0;-webkit-transform-origin:0 0;">
+			</div>
+			
+			<input type="text" id="recaptcha" name="recaptcha" value="" class="input-text" data-validate="{required:true}" style="visibility:hidden;position:absolute;left:-1000000px" />
+		</div>
+		
+		<script type="text/javascript">
+			var onloadCallback = function() {
+				grecaptcha.render('recaptcha-1', {
+					'sitekey': "<?php echo $sitekey; ?>",
+					'theme': "light",
+					'callback': function(response) {
+						if (response.length > 0) {
+							jQuery('#recaptcha').val('checked');
+						}
+					}
+				});
+			};
+		</script>
+		
+		<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;hl=en-GB" async="" defer=""></script>
+	</div>
+<?php endif; ?>

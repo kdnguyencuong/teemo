@@ -1,0 +1,29 @@
+<?php
+/* @var $block \Aheadworks\Blog\Block\Sidebar\Recent */
+?>
+<?php
+    $posts = $block->getPostCollection();
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();	
+	$productHelper = $objectManager->create('Alpha\Productfavourites\Helper\Data');
+?>
+<?php if ($posts->getSize()): ?>
+<?php $postImageBlock = \Magento\Framework\App\ObjectManager::getInstance()->get('Alpha\Awblog\Block\Post'); ?>
+<div class="aw-blog-sidebar__block aw-blog-sidebar-block">
+    <h3 class="aw-blog-sidebar-block__title"><span><?php echo __('Recent') ?> </span><?php echo __('Posts') ?></h3>
+    <div class="aw-blog-sidebar-block__content">
+        <ul class="aw-block-recent-posts">
+            <?php foreach ($posts as $post): ?>
+                <li class="aw-block-recent-posts__item">
+					<?php if(!empty($post->getPostImage())) : ?>
+						<img class="post-thumb" src="<?php echo $productHelper->resize($post->getPostImage(),100,100, 'blog/images/'); ?>" width="83" height="83"/>
+					<?php endif; ?>
+					<div class="blog-item-info">
+						<a href="<?php echo $block->getPostUrl($post) ?>" class="aw-block-recent-posts__link"><?php echo $post->getTitle() ?></a>
+						<span class="aw-block-recent-posts__date"><?php $date = new DateTime($block->formatDate($post->getPublishDate(), \IntlDateFormatter::MEDIUM)); echo date_format($date,"d M,Y") ?></span>
+					</div>
+				</li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>

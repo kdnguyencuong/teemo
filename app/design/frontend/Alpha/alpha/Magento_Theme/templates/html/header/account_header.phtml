@@ -1,0 +1,36 @@
+<div class="account-login">
+	<div class="account-header">
+		<span class="link-login"><?php echo __('Hello. '); ?> 
+			<?php
+			$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+			$customerSession = $objectManager->create('Magento\Customer\Model\Session');
+			if(!$customerSession->isLoggedIn()){
+				echo __('Sign In');
+			}
+			else{
+				echo $customerSession->getCustomer()->getName();
+			}
+			?>
+		</span>
+		<span class="your-account"><?php echo __('Your Account'); ?></span>
+	</div>
+	<?php  if($customerSession->isLoggedIn()){ ?>
+			<div class="login-dropdown">
+				<div class="login-dropdown-content">
+					<div class="action">						
+						<a class="btn-signin" href="<?php echo $this->getUrl('customer/account/logout'); ?>"><div class="goto-login"><?php echo __('Sign Out'); ?></div></a>				
+					</div>
+					<ul class="dropdown-content">
+						<li><a href="<?php echo $this->getUrl('customer/account/index'); ?>"><?php echo __('Your Account'); ?></a></li>
+						<li><a href="<?php echo $this->getUrl('sales/order/history'); ?>"><?php echo __('Your Orders'); ?></a></li>					
+					</ul>
+				</div>
+			</div>	
+	
+			<style>
+				.page-wrapper .header .overFlowBssTT.login-active{
+					    display: none !important;
+				}
+			</style>		
+	<?php	} ?>
+</div>

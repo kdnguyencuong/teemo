@@ -1,0 +1,24 @@
+<ul class="category-page">
+<?php
+	$categoryId =  array(5, 6, 7,8 ,9, 10, 11, 12, 13, 14, 15,16);
+	$_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	foreach($categoryId as $key => $value){
+		$object_manager = $_objectManager->create('Magento\Catalog\Model\Category')->load($value);
+	?>
+		<li class="item">
+            <div class="item-area">
+				<a class="single-image" href="<?php echo $object_manager->getUrl_key();?>">
+					<img class="img-responsive" src="<?php echo $object_manager->getThumbnailImageUrl(); ?>" />
+				<p class="boxed-title"><span class="vertical-align"><?php echo $object_manager->getName(); ?></span></p>
+				</a>
+				<?php if(strip_tags($object_manager->getShort_description()) !=""){?>
+				<div class="category-short-description">
+					<?php echo $object_manager->getShort_description();?>
+				</div>
+				<?php } ?>
+            </div>
+        </li>
+	<?php
+	}
+?> 
+</ul>

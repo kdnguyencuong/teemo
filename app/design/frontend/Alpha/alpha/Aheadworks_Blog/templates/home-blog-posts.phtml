@@ -1,0 +1,51 @@
+<?php
+/* @var $block \Aheadworks\Blog\Block\PostList */
+?>
+
+<?php
+    $posts = $block->getPostCollectionOwl();
+?>
+<?php if ($posts->getSize()): ?>
+	<?php $postBlock = \Magento\Framework\App\ObjectManager::getInstance()->get('Aheadworks\Blog\Block\Post'); ?>
+	<?php $postImageBlock = \Magento\Framework\App\ObjectManager::getInstance()->get('Alpha\Awblog\Block\Post'); ?>
+	<div class="block-title-name"><?php  echo __('<strong>Blog</strong> Posts'); ?></div>
+	<div class="blog-posts-content">
+		<div class="aw-blog-posts">
+			<?php foreach ($posts as $post): ?>
+				<div class="blog-item">
+					<div class="image-datepublish">
+						<a href="<?php echo $postBlock->getPostUrl($post) ?>" class="post-image">
+							<?php if($postImageBlock->getPostImageUrl($post)): ?>
+								<img src="<?php echo $postImageBlock->getPostImageUrl($post); ?>"/>
+							<?php else :?>
+								<?php 
+									$_objectManager = \Magento\Framework\App\ObjectManager::getInstance(); //instance of\Magento\Framework\App\ObjectManager
+									$storeManager = $_objectManager->get('Magento\Store\Model\StoreManagerInterface'); 
+									$currentStore = $storeManager->getStore();
+									$mediaUrl = $currentStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+								?>
+								<img class="post-thumb" src="<?php echo $mediaUrl . 'blog/images/placeholder.jpg'; ?>"/> 
+							<?php endif; ?>						
+						</a>
+						<p class="date"><?php echo date('d', strtotime($post->getPublishDate())); ?><span class="month"><?php echo date('M', strtotime($post->getPublishDate())); ?></span></p>
+					</div>
+					<h2 class="blog-post-title">
+						<a href="<?php echo $postBlock->getPostUrl($post) ?>" class="aw-blog-post__title-link"><?php echo $post->getTitle() ?></a>
+					</h2>
+					<?php if($post->getShortContent()): ?>
+						<div class="blog-post-short-content">
+							 <?php echo $postImageBlock->getShortContent($post) ?>
+						</div>
+					<?php endif; ?>
+					<p class="blog-post-read-more-wrapper">
+						<a href="<?php echo $postBlock->getPostUrl($post) ?>" class="aw-blog-post__read-more action primary"><?php echo __('Read more') ?></a>
+					</p>
+				</div>
+			<?php endforeach; ?>
+		</div>
+	</div>
+<?php else: ?>
+    <div class="message info empty">
+        <div><?php  echo __('No posts.') ?></div>
+    </div>
+<?php endif; ?>

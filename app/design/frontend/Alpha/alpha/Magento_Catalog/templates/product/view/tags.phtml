@@ -1,0 +1,29 @@
+<?php
+$_product = $block->getProduct();
+$tags = $_product->getResource()->getAttribute('tags')->getFrontend()->getValue($_product);
+?>
+
+<div class="block-tags">
+	<div class="block-title-name"><strong><?php echo __('Tags'); ?></strong></div>
+	<div class="tag-container">
+		<?php if(count(explode(',', $tags))): ?>
+			<ul class="tag-list">
+				<?php $count = 0; ?>
+				<?php foreach(explode(',', $tags) as $tag): $count++; ?>
+					<li class="<?php if($count%2==0) echo "even"; ?>">
+						<span><?php echo $tag; ?></span>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
+		<form class="add-tags" action="">
+			<label><?php echo __("Add your tags") ?></label>
+			<div class="input-box">
+				<input type="text" name="tags" id="tags" class="input-text " data-validate="{required:true}" data-bind="" placeholder="" aria-required="true">
+			</div>
+			<button type="submit" title="Add Your Tags" class="action primary tocart">
+				<span><?php echo __("Add Your Tags") ?></span>
+			</button>
+		</form>
+	</div>
+</div>

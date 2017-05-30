@@ -1,0 +1,113 @@
+<?php
+/* @var $block \Aheadworks\Blog\Block\Post */
+?>
+<?php
+    $post = $block->getPostModel();
+    $categories = $block->getCategoryCollection();
+	$controllerName = $this->getRequest()->getControllerName();
+	$actionName = $this->getRequest()->getActionName();
+?>
+<?php if ($post): ?>
+	<?php if($controllerName == 'post' && $actionName == 'view') : ?>
+		<article class="aw-blog-posts__post aw-blog-post-view">
+			<?php $postImageBlock = \Magento\Framework\App\ObjectManager::getInstance()->get('Alpha\Awblog\Block\Post'); ?>
+			<?php if($postImageBlock->getPostImageUrl($post)): ?>
+				<img class="post-thumb" src="<?php echo $postImageBlock->getPostImageUrl($post); ?>"/>
+			<?php endif; ?>
+			<header class="aw-blog-post__header">
+				<h2 class="aw-blog-post__title">
+					<a href="<?php echo $block->getPostUrl($post) ?>" class="aw-blog-post__title-link"><?php echo $post->getTitle() ?></a>
+				</h2>
+			</header>
+			<ul class="aw-blog-post__info">           
+				<li class="aw-blog-post__author"><?php echo __('By:'); ?> <?php echo $post->getAuthorName() ?> - </li>
+				<li class="aw-blog-post__date"><?php echo $block->formatDate($post->getPublishDate(), \IntlDateFormatter::MEDIUM) ?> - </li>
+				<?php if ($categories->getSize()): ?>
+					<li class="aw-blog-post__category">
+						<?php $categoryLinks = [];
+							foreach ($categories as $category):
+								$categoryLinks[] = $block->getCategoryLinkHtml($category);
+							endforeach;
+							$countLinks = count($categoryLinks);
+						?>
+						<?php echo implode(
+							$countLinks > 2 ? ', ' : '',
+							[
+								implode(', ', array_slice($categoryLinks, 0, $countLinks > 2 ? $countLinks - 2 : 0)),
+								implode(' ' . __('and') . ' ', array_slice($categoryLinks, -2, 2))
+							]
+						) ?> - 
+					</li>
+				<?php endif; ?>
+			</ul>
+			
+			<div class="aw-blog-post__content">
+				<?php echo $block->getContent($post) ?>
+			</div>
+
+			<div class="blog-post-tags-share">
+				<div class="aw-blog-post__tags">
+						<div class="aw-blog-tags aw-blog-tags--plain">
+							<span class="label-tags"><?php echo __('Tags:'); ?></span> 
+							<?php foreach ($post->getTags() as $tagName): ?>
+								<a href="<?php echo $block->getSearchByTagUrl($tagName) ?>" class="aw-blog-tags__tag"><?php echo $tagName ?></a>
+							<?php endforeach; ?>
+						</div>
+				</div>
+				<?php if ($block->isViewMode()): ?>
+					<?php if ($block->showSharing()): ?>
+						<div class="aw-blog-post__share">
+							<p class="aw-blog-post__share-title"><?php echo __('Share') ?></p>
+							<div class="aw-blog-post__share-content">
+								<div class="container">
+									<?php echo $block->getSharethisEmbedHtml() ?>
+								</div>
+							</div>
+						</div>
+					<?php endif; ?> 
+				<?php endif; ?>
+			</div>
+		</article>
+	<?php else :?>
+		<article class="aw-blog-posts__post aw-blog-post">
+			<?php $postImageBlock = \Magento\Framework\App\ObjectManager::getInstance()->get('Alpha\Awblog\Block\Post'); ?>
+			<?php if($postImageBlock->getPostImageUrl($post)): ?>
+				<div class="image-blog"><img class="post-thumb" src="<?php echo $postImageBlock->getPostImageUrl($post); ?>"/></div>
+			<?php else :?>
+				<?php 
+					$_objectManager = \Magento\Framework\App\ObjectManager::getInstance(); //instance of\Magento\Framework\App\ObjectManager
+					$storeManager = $_objectManager->get('Magento\Store\Model\StoreManagerInterface'); 
+					$currentStore = $storeManager->getStore();
+					$mediaUrl = $currentStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+				?>
+				<div class="image-blog"><img class="post-thumb" src="<?php echo $mediaUrl . 'blog/images/placeholder.jpg'; ?>"/> </div>
+			<?php endif; ?>
+			<header class="aw-blog-post__header">
+				<h2 class="aw-blog-post__title">
+					<a href="<?php echo $block->getPostUrl($post) ?>" class="aw-blog-post__title-link"><?php echo $post->getTitle() ?></a>
+				</h2>
+			</header>
+			<ul class="aw-blog-post__info">           
+				<li class="aw-blog-post__author"><?php echo __('By:'); ?> <?php echo $post->getAuthorName() ?> - </li>
+				<li class="aw-blog-post__date"><?php echo $block->formatDate($post->getPublishDate(), \IntlDateFormatter::MEDIUM) ?> - </li>
+				<?php if ($categories->getSize()): ?>
+					<li class="aw-blog-post__category">
+						<?php $categoryLinks = [];
+							foreach ($categories as $category):
+								$categoryLinks[] = $block->getCategoryLinkHtml($category);
+							endforeach;
+							$countLinks = count($categoryLinks);
+						?>
+						<?php echo implode(
+							$countLinks > 2 ? ', ' : '',
+							[
+								implode(', ', array_slice($categoryLinks, 0, $countLinks > 2 ? $countLinks - 2 : 0)),
+								implode(' ' . __('and') . ' ', array_slice($categoryLinks, -2, 2))
+							]
+						) ?>
+					</li>
+				<?php endif; ?>
+			</ul>			
+		</article>
+	<?php endif; ?>
+<?php endif; ?>

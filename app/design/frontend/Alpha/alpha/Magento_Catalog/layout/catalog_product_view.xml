@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+		<referenceContainer name="content">
+			<container name="product.cms.blocks" label="product.cms.blocks" htmlTag="div" htmlClass="product-cms-blocks" before="-">
+				<block class="Magento\Cms\Block\Block" name="product.waring">
+					<arguments>
+						<argument name="block_id" xsi:type="string">product_waring</argument>
+					</arguments>
+				</block>
+				<block class="Magento\Cms\Block\Block" name="product.now.online">
+					<arguments>
+						<argument name="block_id" xsi:type="string">product_now_online</argument>
+					</arguments>
+				</block>
+			</container>
+			
+			<container name="product.media.main" label="product.media.main" htmlTag="div" htmlClass="product-media-main" after="product.cms.blocks">
+				<block class="Magento\Catalog\Block\Product\View" name="product.social" template="product/view/social.phtml" after="-" />
+			</container>
+			
+			<container name="product.info.speci" label="product.info.speci" htmlTag="div" htmlClass="product-info-speci" after="product.media.main">
+				<block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description.custom" template="product/view/information.phtml" before="-">
+					<arguments>
+                        <argument name="at_call" xsi:type="string">getDescription</argument>
+                        <argument name="at_code" xsi:type="string">description</argument>
+                        <argument name="css_class" xsi:type="string">description</argument>
+                    </arguments>
+				</block>
+				<block class="Magento\Catalog\Block\Product\View\Attributes" name="product.attributes.custom" template="product/view/specifications.phtml" after="product.info.description.custom" />
+			</container>
+			
+			<container name="product.content.aside" label="product.content.aside" htmlTag="div" htmlClass="product-content-aside" after="product.info.speci">
+			
+			</container>
+		
+		</referenceContainer>
+		
+        <referenceBlock name="product.info.form.options">
+			<block class="Magento\Catalog\Pricing\Render" name="product.price.final.p.option" after="product.info.options.wrapper">
+				<arguments>
+					<argument name="price_render" xsi:type="string">product.price.render.default</argument>
+					<argument name="price_type_code" xsi:type="string">final_price</argument>
+					<argument name="zone" xsi:type="string">item_view</argument>
+				</arguments>
+			</block>
+        </referenceBlock>
+		
+		<referenceContainer name="content.aside">
+			<block class="Alpha\Tag\Block\Product\Listtag" name="product.tags" template="Alpha_Tag::tags.phtml" after="-"/>
+		</referenceContainer>
+		
+        <referenceBlock name="product.info.details" remove="true" />
+        <referenceBlock name="product.info.review" remove="true" />
+        <referenceBlock name="product.info.sku" remove="true" />
+        <referenceBlock name="product.info.extrahint" remove="true" />
+        <referenceBlock name="product.info.overview" remove="true" />
+        <referenceBlock name="product.info.description" remove="true" />
+        <referenceBlock name="product.attributes" remove="true" />
+		
+		<move element="page.main.title" destination="content" before="-"/>
+		<move element="product.info.media" destination="product.media.main" before="-" />
+		<move element="product.info.main" destination="product.media.main" before="product.social"/>
+
+		<move element="product.price.final" destination="product.info.form.content" before="product.info.addtocart"/>
+		<move element="catalog.product.list.mageworx.downloads.attachments" destination="product.info.speci" before="product.info.description.custom"/>
+		<move element="reviews.tab" destination="content.aside" after="product.info.upsell"/>		
+		<move element="content.aside" destination="product.content.aside" />		
+		
+    </body>
+</page>

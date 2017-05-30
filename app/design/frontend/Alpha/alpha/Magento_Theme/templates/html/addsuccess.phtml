@@ -1,0 +1,34 @@
+<div id="after-added-overlay" class="after-added-overlay"></div>
+<div class="popup-choose-continue">
+	<div class="added-cart">
+		<p><?php echo __("ITEM HAS BEEN ADDED TO YOUR CART") ?></p>
+		<ul>
+			<li>
+				<a title="Continue shopping" class="continue-btn" href="javascript:void(0)">
+					<span><?php echo __("Continue shopping") ?></span>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->getUrl('checkout/'); ?>" title="View cart & checkout" class="continue-btn view-btn">
+					<span><?php echo __("View cart & checkout") ?></span>
+				</a>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="added-quote">
+		<p><?php echo __("ITEM HAS BEEN ADDED TO YOUR QUOTE") ?></p>
+		<ul>
+			<li>
+				<a title="Continue shopping" class="continue-btn" href="javascript:void(0)">
+					<span><?php echo __("Continue shopping") ?></span>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->getUrl('quotation/quote/'); ?>" title="View quote" class="continue-btn view-btn">
+					<span><?php echo __("View quote") ?></span>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>

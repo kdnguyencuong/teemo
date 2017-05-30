@@ -1,0 +1,288 @@
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+//
+//  Styles for emails
+//  _____________________________________________
+
+//  See comments in source/_email-base.less for explanation of email styles
+
+@import 'source/lib/_lib.less'; // Global lib
+@import 'source/lib/variables/_email.less'; // Global email variables
+@import 'source/_theme.less'; // Global variables override
+@import 'source/_variables.less'; // Local theme variables
+@import 'source/_email-variables.less'; // Theme variables for emails
+
+//
+//  Styles for emails
+//  ---------------------------------------------
+
+@import 'source/_email-base.less'; // Contains primary email styles
+@import 'source/_email-extend.less'; // Contains theme-specific adjustments to email styles
+
+//
+//  Module-specific styles for emails
+//  ---------------------------------------------
+
+//@magento_import 'source/_email.less';
+html,body,.shipment-track tbody > tr > td,
+.email-items tfoot > tr > td{
+	background-color:#ffffff;
+}
+
+.header{
+	background-color:#f3f3f3;
+}
+table.wrapper-inner tr td{
+	table.main tr td.header{
+		background-color:#f3f3f3;
+	}
+}
+table.main tr td.header{
+	background:#f3f3f3;
+}
+table.header-table tr td{
+	vertical-align:middle;
+}
+table tr td.header{
+	padding:9px 5px 4px;
+	vertical-align:middle;
+}
+.header-list-social{
+	margin-top:1px;
+}
+
+.footer{
+	padding:36px 0 36px 0;
+	text-align:center;
+	font-family:Arial;
+	font-size:13px;
+	color:#333333;
+	background-color:#f3f3f3;
+}
+.footer p{
+	font-family:Arial;
+	font-size:13px;
+	color:#333333;
+	margin:0;
+}
+.footer a,.footer a:visited, .footer a:hover{
+	font-family:Arial;
+	font-size:13px;
+	text-decoration:underline;
+	color:#333333 !important;
+}
+.footer .closing{
+	margin-bottom:12px;
+}
+.list-social{
+	margin-top:26px;
+}
+.list-social a img{
+	margin:0;
+}
+.payments{
+	padding:20px 0 15px 0;
+	text-align:center;
+}
+
+body,p,a,span,strong,div,li,td,th,dt,dl,dd{
+	font-family:Arial;
+	font-size:13px;
+	font-weight:normal;
+}
+body,p,span,strong,div,li,td,th,dt,dl,dd{
+	color:#444444;
+}
+a,
+a:visited,
+a:hover,
+.ii a[href]{
+	color:#a0a0a0;
+	text-decoration:underline;
+}
+span{
+	text-transform:none;
+}
+strong,strong span{
+	font-weight:bold !important;
+	color:#000000;
+}
+table{
+	width:100%;
+}
+table.main{
+	margin:0 auto;
+	width:600px;
+	max-width:600px;
+}
+.main-content a,.main-content a:visited,
+table.main-content tr td a,
+table.main-content tr td a:visited{
+	color:#a0a0a0!important;
+}
+ul{
+	padding-left:30px;
+}
+.greeting{
+	font-size:13px;
+	font-weight:bold;
+	color:#000000;
+	text-transform:capitalize;
+}
+.main-content{
+	padding:26px 0px 26px;
+}
+table tr td,table tr th{
+
+}
+
+ul li{
+	margin:0 0 5px!important;
+}
+table.order-details-section1 tr td,
+table.customer-details-section tr td,
+table.address-details tr td{
+	width:50%;
+	padding:6px 0 0 0;
+}
+table.customer-details-section tr.last td{
+	padding:7px 0 13px 0;
+}
+table.address-details tr td p,
+table.method-details tr td p{
+	margin:11px 0 10px 0;
+}
+h2{
+	font:bold 13px/21px Arial;
+	text-transform:capitalize;
+	margin:2px 0 0;
+	color:#000000;
+}
+table tr td dl,dl{
+	margin:0 0 0 0;
+}
+table tr td dt,dt{
+	margin:11px 0 5px 0;
+}
+table.email-items{
+	border:none;
+}
+table.email-items tr td img{
+	width:80px;
+	max-width:80px;
+	height:auto;
+	margin:0 35px 0 0;
+}
+table.email-items tr td,
+table.email-items tr th{
+	background:#ffffff;
+	border-left:none;
+	border-right:none;
+	padding:19px 0px;
+	vertical-align:top;
+}
+table.email-items tfoot tr td,
+table.email-items tfoot tr th{
+	background:#ffffff;
+}
+table.email-items tr th{
+	font:bold 13px/1 Arial;
+	color:#000000;	
+	vertical-align:middle;
+}
+table.email-items tr td .product-name{
+	font:normal 13px/19px Arial;
+	color:#000000;
+}
+table.email-items tr td .item-options{}
+table.email-items tr td .item-options p{
+	margin:0;
+}
+table.email-items tr td .item-options p,
+table.email-items tr td .item-options p span{
+	font:normal 11px/18px Arial;
+	color:#777777;
+	text-transform:capitalize;
+}
+table.email-items tr td.item-sku,
+table.email-items tr td.item-qty,
+table.email-items tr td.item-price,
+table.email-items tr td.item-sku span,
+table.email-items tr td.item-qty span,
+table.email-items tr td.item-price span,
+table.email-items tfoot tr th,
+table.email-items tfoot tr td,
+table.email-items tfoot tr td span{
+	font:normal 13px/18px Arial;
+	color:#444444;
+	vertical-align:top;
+}
+table.email-items tfoot.order-totals tr th,
+table.email-items tfoot.order-totals tr td{
+	padding-bottom:6px;
+}
+table.email-items tfoot.order-totals tr th{
+	padding-right:43px;
+}
+table.email-items tfoot tr td strong,
+table.email-items tfoot tr th strong{
+	font:700 12px/18px Arial;
+	color:#000000;
+}
+table.email-items tfoot{
+	border-top:1px solid #dddddd;
+}
+table.email-items tfoot tr td{
+	padding-right:0;
+}
+table tr.order-details td p{
+	font:normal 12px/15px Arial;
+}
+table tr td.padding024{
+	padding:0 0 24px 0;
+}
+table tr td.padding030{
+	padding:0 0 30px 0;
+}
+table tr td.padding2930{
+	padding:29px 0 30px 0;
+}
+table tr td.padding2330{
+	padding:23px 0 30px 0;
+}
+table tr td.padding2130{
+	padding:21px 0 30px 0;
+}
+table tr td.padding2325{
+	padding:23px 0 25px 0;
+}
+table tr td.padding2115{
+	padding:21px 0 15px 0;
+}
+table tr td.padding1715{
+	padding:17px 0 15px 0;
+}
+table tr td.padding2110{
+	padding:21px 0 10px 0;
+}
+table tr td.padding2122{
+	padding:21px 0 22px 0;
+}
+table tr td.padding2223{
+	padding:22px 0 23px 0;
+}
+table tr td.padding00{
+	padding:0;
+}
+table tr td.border-bottom{
+	border-bottom:1px solid #dddddd;
+}
+table tr td,table tr th{
+	border-color:#dddddd!important;
+}
+.payment-method caption{
+	display: none;
+}

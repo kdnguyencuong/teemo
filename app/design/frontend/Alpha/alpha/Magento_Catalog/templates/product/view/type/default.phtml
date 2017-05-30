@@ -1,0 +1,70 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /* @var $block \Magento\Catalog\Block\Product\View\AbstractView */?>
+<?php $_product = $block->getProduct() ?>
+
+<ul class="product-info-top">
+	<?php if( $_product->getData('brand') && $_product->getData('brand') != ''): ?>
+		<li>
+			<strong><?php echo __('Brand: ') ?></strong>			
+			<?php echo $_product->getResource()->getAttribute('brand')->getFrontend()->getValue($_product); ?>
+		</li>
+	<?php endif; ?>
+	<li>
+		<strong><?php echo __('Product Code: ') ?></strong>
+		<?php echo $_product->getData('sku'); ?>
+	</li>
+	<?php if( $_product->getData('length') || $_product->getData('width') || $_product->getData('height')): ?>
+		<li>
+			<strong><?php echo __('Dimensions: ') ?></strong>
+			<?php 
+				if($_product->getData('length')) {
+					echo $_product->getData('length') . 'W x '; 
+				}
+			?> 
+			<?php 
+				if($_product->getData('width')) {
+					echo $_product->getData('width') . 'D x '; 
+				}
+			?> 
+			<?php 
+				if($_product->getData('height')) {
+					echo $_product->getData('height') . 'H'; 
+				}
+			?> 
+		</li>
+	<?php endif; ?>
+	<?php if( $_product->getData('weight') && $_product->getData('weight') != ''): ?>
+		<li>
+			<strong><?php echo __('Weight: ') ?></strong>
+			<?php echo number_format($_product->getData('weight'),2) . ' KG'; ?>
+		</li>
+	<?php endif; ?>
+	<?php if( $_product->getData('power') && $_product->getData('power') != ''): ?>
+		<li>
+			<strong><?php echo __('Power: ') ?></strong>
+			<?php echo $_product->getData('power'); ?>
+		</li>
+	<?php endif; ?>
+	<?php if ($block->displayProductStockStatus()): ?>
+		<li>
+			<strong><?php echo __('Status: ') ?></strong>
+			<?php if ($_product->isAvailable()): ?>
+				<span class="stock available"><?php /* @escapeNotVerified */ echo __('Available') ?></span>
+			<?php else: ?>
+				<span class="stock unavailable"><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span>
+			<?php endif; ?>
+		</li>
+	<?php endif; ?>
+</ul>
+
+<?php if($_product->getShortDescription()) : ?>
+	<div class="short-description"><?php echo $_product->getShortDescription(); ?></div>
+<?php endif; ?>

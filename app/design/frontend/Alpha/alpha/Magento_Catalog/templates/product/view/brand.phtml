@@ -1,0 +1,20 @@
+<?php
+$_product = $block->getProduct();
+$catBlock = \Magento\Framework\App\ObjectManager::getInstance()->get('Alpha\CatAttr\Block\Category\View');
+?>
+<?php
+$categoryId = $this->getParentCateg();
+$brand = $_product->getResource()->getAttribute('brand')->getFrontend()->getValue($_product);
+$categories = $catBlock->getCategoryByBrand($categoryId, $brand);
+?>
+
+<?php if($categories && count($categories)>0): ?>
+	<?php foreach ($categories as $category): ?>
+		<?php if ($category['thumbnail_image']): ?>
+			<div class="banner"><a href="<?php echo $category->getUrl();?>"><img src="<?php echo $catBlock->getCategoryThumbImage($category['thumbnail_image']); ?>" /></a></div>
+		<?php endif; ?>
+		
+		<div class="block-title-name"><a href="<?php echo $category->getUrl();?>"><strong><?php echo __('About'); ?></strong> <?php echo $category->getName(); ?></a></div>
+		<?php echo $category->getShortDescription(); ?>
+	<?php endforeach; ?>
+<?php endif; ?>

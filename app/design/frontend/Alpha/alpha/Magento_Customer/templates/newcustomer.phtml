@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * New Customer block template
+ *
+ * @var $block \Magento\Customer\Block\Form\Login\Info
+ */
+?>
+<?php if ($block->getRegistration()->isAllowed()): ?>
+<div class="block block-new-customer">
+	<div class="new-customer-right">
+		<div class="block-title">
+			<span class="non-account"><?php echo __('Don\'t have an account with us?'); ?></span>
+			<h1><?php echo __('Register today!'); ?></h1>
+		</div>
+		<div class="block-content" aria-labelledby="block-new-customer-heading">
+			<?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('register-today')->toHtml(); ?>
+			<div class="actions-toolbar">
+				<div class="primary">
+					<a href="<?php /* @escapeNotVerified */ echo $block->getCreateAccountUrl() ?>" class="action create primary"><span><?php /* @escapeNotVerified */ echo __('Sign up now') ?></span></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php endif; ?>

@@ -1,0 +1,25 @@
+<?php
+/* @var $block \Aheadworks\Blog\Block\Post */
+?>
+<?php
+  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+ /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $blogCollection */
+  $blogCollection = $objectManager->create('Aheadworks\Blog\Model\ResourceModel\Category\Collection');
+
+	$blogCollection->load();
+	
+if(count($blogCollection) > 0): ?>
+	<div class="aw-blog-sidebar__block aw-blog-sidebar-block">
+	<h3 class="aw-blog-sidebar-block__title"><?php echo __('Categories') ?></h3>
+	<div class="aw-blog-sidebar-block__content">
+	<ul class="aw-block-cates">
+	<?php foreach ($blogCollection as $p) : ?>
+		<?php if($p->getStatus() == 1) : ?>
+			<li class="aw-block-cate-item"><?php echo $block->getCategoryLinkHtml($p); ?></li>
+		<?php endif; ?>
+	<?php endforeach; ?>
+	</ul>
+	</div></div>
+<?php endif; ?>
+

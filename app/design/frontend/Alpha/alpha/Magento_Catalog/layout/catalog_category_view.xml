@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+		<container name="category.view.left" htmlTag="div" htmlClass="category-view-left" before="-">
+		</container>
+		<referenceContainer name="main.content">
+			<container name="free.shiping.section" htmlTag="div" htmlClass="free-shipping-section" after="-">
+				<block class="Magento\Cms\Block\Block" name="Free Shipping">
+				<arguments>
+					<argument name="block_id" xsi:type="string">free-shipping</argument>
+				</arguments>
+				</block>
+			</container>
+		</referenceContainer>
+		
+		
+        <move element="category.view.left" destination="category.view.container" before="-" />
+        <move element="page.main.title" destination="category.view.left" before="-" />
+        <move element="category.description" destination="category.view.left" after="page.main.title" />
+		<move element="catalog.leftnav" destination="category.product.list.additional" />
+		
+		<referenceContainer name="rss.link" remove="true" />
+    </body>
+</page>
